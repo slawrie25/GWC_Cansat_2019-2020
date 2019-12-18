@@ -1,6 +1,12 @@
 #include <Arduino_LPS22HB.h>
 #include <Arduino_HTS221.h>
 #include <Arduino_LSM9DS1.h>
+#include <Adafruit_CCS811.h>
+#include <Wire.h>
+#include <Adafruit_VEML6075.h>
+
+Adafruit_VEML6075 uv = Adafruit_VEML6075();
+Adafruit_CCS811 ccs;
 
 // Define this
 int timeToWait;
@@ -26,6 +32,22 @@ void setup() {
     Serial.println("Failed to initialize IMU!");
     while (1);
   }
+
+  if(!ccs.begin()){
+    Serial.println("Failed to start sensor (CCS811)! Please check your wiring.");
+    while (1);
+  }
+
+  if (! uv.begin()) {
+    Serial.println("Failed to communicate with VEML6075 sensor, check wiring?");
+  }
+
+  uv.setIntegrationTime(VEML6075_100MS);
+  uv.setHighDynamic(true);
+  uv.setForcedMode(false);
+  uv.setCoefficients(2.22, 1.33,  // UVA_A and UVA_B coefficients
+                     2.95, 1.74,  // UVB_C and UVB_D coefficients
+                     0.001461, 0.002591); // UVA and UVB responses
 
   // Get the speed of all the IMU sensors so we determine how long to wait
   int AccelSampleRate = IMU.accelerationSampleRate();
@@ -73,6 +95,22 @@ void loop() {
   // Get the acceleration values
   IMU.readAcceleration(Ax, Ay, Az);
 
+  // Air sensor values that I have no idea what they mean
+  float co2, voc;
+
+  // Wait for it to be ready
+  while(!ccs.available()) {}
+
+  co2 = ccs.geteCO2();
+  voc = ccs.getTVOC();
+
+  // UV Sensors
+  float uva, uvb, uvi;
+
+  uva = uv.readUVA();
+  uvb = uv.readUVB();
+  uvi = uv.readUVI();
+
   // Print all of the sensor values as csv
   Serial.print(pressure);
   Serial.print(", ");
@@ -108,6 +146,22 @@ void loop() {
   Serial.print(", ");
 
   Serial.print(Gz);
+  Serial.print(", ");
+
+  Serial.print(co2);
+  Serial.print(", ");
+
+  Serial.print(voc);
+  Serial.print(", ");
+
+  Serial.print(uva);
+  Serial.print(", ");
+
+  Serial.print(uvb);
+  Serial.print(", ");
+
+  Serial.print(uvi);
+  Serial.print(", ");
 
   // Print a newline
   Serial.println();
