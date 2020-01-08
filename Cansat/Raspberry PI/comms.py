@@ -17,4 +17,5 @@ backup = open("DATA - " + str(datetime.datetime.utcnow()), "w+")
 
 def send(data):
 	print(data)
-	uart.write(data + "\r\n")
+	backup.write(data + "\n")
+	rfm9x.send(bytes(data,"UTF-8"))
