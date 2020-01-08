@@ -1,27 +1,30 @@
-import pigpio, pynmea2
+import pigpio
+import pynmea2
+import cansat_sensor
 
-pi = pigpio.pi()
+class gps(cansat_sensor.Sensor):
+	self.pi = pigpio.pi()
 
-rx = 23
-baud = 9600
-bits = 8
+	self.rx = 23
+	self.baud = 9600
+	self.bits = 8
 
-pi.set_mode(rx, pigpio.INPUT)
+	self.pi.set_mode(rx, pigpio.INPUT)
 
-pigpio.exceptions = False
-pi.bb_serial_read_close(rx)
-pigpio.exceptions = True
+	self.pigpio.exceptions = False
+	self.pi.bb_serial_read_close(rx)
+	self.pigpio.exceptions = True
 
-pi.bb_serial_read_open(rx, baud, bits)
+	self.pi.bb_serial_read_open(rx, baud, bits)
 
-name = "gps"
-id = "G"
 
-def data():
-	data = ""
-	while True:
-		(count, char)= pi.bb_serial_read(rx)
-		for i in range(count):
-			if chr(char[i]) == "\n":
-				return([data.replace("\r", "")])
-			data += chr(char[i])
+	def data():
+		data = ""
+		while True:
+			(count, char)= pi.bb_serial_read(rx)
+			for i in range(count):
+				if chr(char[i]) == "\n":
+					return([data.replace("\r", "")])
+				data += chr(char[i])
+
+sensor = gps("GPS", "G")
