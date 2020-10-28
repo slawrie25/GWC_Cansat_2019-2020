@@ -1,0 +1,7 @@
+UV sensor: VEML6075
+Air/gas sensor: CCS811
+On the Nano 33 BLE sense:
+  -9 axis inertial sensor (3 axis accelerometer, 3 axis gyroscope, 3 axis magnetometer) {LSM9DS1}
+  -temperature and humidity sensor HTS221
+  -barometric sensor LPS22HB
+GPS module
