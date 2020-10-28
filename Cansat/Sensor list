@@ -1,7 +1,10 @@
-UV sensor: VEML6075
-Air/gas sensor: CCS811
-On the Nano 33 BLE sense:
+UV sensor: VEML6075 (info: https://learn.adafruit.com/adafruit-veml6075-uva-uvb-uv-index-sensor)
+
+Air/gas sensor: CCS811 (info: https://learn.adafruit.com/adafruit-ccs811-air-quality-sensor)
+
+On the Nano 33 BLE sense: (info: https://www.arduino.cc/en/Guide/NANO33BLESense)
   -9 axis inertial sensor (3 axis accelerometer, 3 axis gyroscope, 3 axis magnetometer) {LSM9DS1}
   -temperature and humidity sensor HTS221
   -barometric sensor LPS22HB
-GPS module
+  
+GPS module MTK3339 chipset (info: https://www.adafruit.com/product/746)
